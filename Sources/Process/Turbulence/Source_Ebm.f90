@@ -113,7 +113,7 @@
 
     ! for formula C.7
     u_k_u_l_n_k_n_l = uu % n(c)*n1n1 +    vv % n(c)*n2n2 +    ww % n(c)*n3n3 + &
-                  2.*uv % n(c)*n1n2 + 2.*uw % n(c)*n1n3 + 2.*vw % n(c)*n2n3
+                   2.*uv % n(c)*n1n2 + 2.*uw % n(c)*n1n3 + 2.*vw % n(c)*n2n3
 
     !---------------!
     !   uu stress   !
@@ -206,6 +206,8 @@
 
       ! limited stress
       stress = uv % n(c)
+      if (stress .lt. 0) stress = min(stress,-TINY)
+      if (stress .ge. 0) stress = max(stress, TINY)
 
       ! formula C.7
       phi_wall = - 5.*eps_2_k * (                           &
@@ -234,6 +236,8 @@
 
       ! limited stress
       stress = uw % n(c)
+      if (stress .lt. 0) stress = min(stress,-TINY)
+      if (stress .ge. 0) stress = max(stress, TINY)
 
       ! formula C.7
       phi_wall = - 5.*eps_2_k * (                           &
@@ -262,6 +266,8 @@
 
       ! limited stress
       stress = vw % n(c)
+      if (stress .lt. 0) stress = min(stress,-TINY)
+      if (stress .ge. 0) stress = max(stress, TINY)
 
       ! formula C.7
       phi_wall = - 5.*eps_2_k * (                          &
