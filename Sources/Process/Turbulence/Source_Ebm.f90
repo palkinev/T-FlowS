@@ -51,15 +51,15 @@
     ! no need to compute this for EPS -> can be improved
     kin % n(c) = max(0.5*(uu % n(c) + vv % n(c) + ww % n(c)), TINY)
     ! P_k = 0.5 P_ii = - u_i u_k dU_i/dx_k
-    p_kin(c) = max(-( uu % n(c) * u % x(c)  &
-                    + uv % n(c) * u % y(c)  &
-                    + uw % n(c) * u % z(c)  &
-                    + uv % n(c) * v % x(c)  &
-                    + vv % n(c) * v % y(c)  &
-                    + vw % n(c) * v % z(c)  &
-                    + uw % n(c) * w % x(c)  &
-                    + vw % n(c) * w % y(c)  &
-                    + ww % n(c) * w % z(c)), TINY)
+    p_kin(c) = -( uu % n(c) * u % x(c)  &
+                + uv % n(c) * u % y(c)  &
+                + uw % n(c) * u % z(c)  &
+                + uv % n(c) * v % x(c)  &
+                + vv % n(c) * v % y(c)  &
+                + vw % n(c) * v % z(c)  &
+                + uw % n(c) * w % x(c)  &
+                + vw % n(c) * w % y(c)  &
+                + ww % n(c) * w % z(c))
 
     ! |df22/x_j|
     mag_f22 = max( f22 % x(c)**2. + f22 % y(c)**2. + f22 % z(c)**2., TINY )
