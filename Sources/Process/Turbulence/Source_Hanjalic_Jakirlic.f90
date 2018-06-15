@@ -218,7 +218,7 @@
       ! page 143 A
       a_ = 1. - (9./8.)*(a_2-a_3)
       a_ = max(a_,0.)
-      !a_ = min(a_,1.)
+      a_ = min(a_,1.)
 
       !---------------------------------------------------!
       !   iterative procedure to find e_, e_2, e_3, f_s   !
@@ -257,8 +257,8 @@
 
         ! page 143 E
         e_ = 1. - (9./8.) * (e_2 - e_3)
-        !e_ = max(e_, 0.) ! does not influence result
-        !e_ = min(e_, 1.) ! does not influence result
+        e_ = max(e_, 0.) ! does not influence result
+        e_ = min(e_, 1.) ! does not influence result
         ! page 143 f_s
         f_s = 1.-(a_**0.5*e_**2.)
       end do
@@ -345,7 +345,7 @@
       !---------------!
       if(name_phi .eq. 'UU') then
         ! limited stress
-        stress = max(uu % n(c), TINY)
+        stress = uu % n(c)
 
         prod_and_coriolis = p11
 
@@ -366,7 +366,7 @@
       !---------------!
       if(name_phi .eq. 'VV') then
         ! limited stress
-        stress = max(vv % n(c), TINY)
+        stress = vv % n(c)
 
         prod_and_coriolis = p22
 
@@ -387,7 +387,7 @@
       !---------------!
       if(name_phi .eq. 'WW') then
         ! limited stress
-        stress = max(ww % n(c), TINY)
+        stress = ww % n(c)
 
         prod_and_coriolis = p33
 
@@ -409,8 +409,6 @@
       if(name_phi .eq. 'UV') then
         ! limited stress
         stress = uv % n(c)
-        if (stress .lt. 0) stress = min(stress,-TINY)
-        if (stress .ge. 0) stress = max(stress, TINY)
 
         prod_and_coriolis = p12
 
@@ -435,8 +433,6 @@
       if(name_phi .eq. 'UW') then
         ! limited stress
         stress = uw % n(c)
-        if (stress .lt. 0) stress = min(stress,-TINY)
-        if (stress .ge. 0) stress = max(stress, TINY)
 
         prod_and_coriolis = p13
 
@@ -461,8 +457,6 @@
       if(name_phi .eq. 'VW') then
         ! limited stress
         stress = vw % n(c)
-        if (stress .lt. 0) stress = min(stress,-TINY)
-        if (stress .ge. 0) stress = max(stress, TINY)
 
         prod_and_coriolis = p23
 
@@ -485,11 +479,15 @@
       !-------------------------------------!
       !   repeating part for all stresses   !
       !-------------------------------------!
+      ! limit stress
+      if (stress .lt. 0) stress = min(stress,-TINY)
+      if (stress .ge. 0) stress = max(stress, TINY)
 
       ! term depending on Kronecker symbol 
       if(name_phi .eq. 'UU' .or. &
          name_phi .eq. 'VV' .or. &
          name_phi .eq. 'WW') then
+
         b(c) = b(c) + grid % vol(c) *  (   &
           c_1 * eps % n(c)*TWO_THIRDS      & ! part of Phi_ij_1
           - (1.-f_s)*TWO_THIRDS*eps % n(c) ) ! part of eps_ij^h
@@ -531,7 +529,7 @@
       + uv % z(c) * u_yz(c) + vv % z(c) * v_yz(c) + vw % z(c) * w_yz(c)        &
       + uw % z(c) * u_zz(c) + vw % z(c) * v_zz(c) + ww % z(c) * w_zz(c)        &
 
-      + c_3e * kin % n(c) / eps_lim(c) * (                                     &
+      + c_3e * t_scale(c) * (                                                  &
         uu % x(c)*( u % x(c)*u_xx(c) + v % x(c)*v_xx(c) + w % x(c)*w_xx(c) )   &
       + uu % y(c)*( u % x(c)*u_xy(c) + v % x(c)*v_xy(c) + w % x(c)*w_xy(c) )   &
       + uu % z(c)*( u % x(c)*u_xz(c) + v % x(c)*v_xz(c) + w % x(c)*w_xz(c) )   &
