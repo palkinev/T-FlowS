@@ -6,6 +6,11 @@
 !   Following paper "A new approach to modelling near-wall turbulence energy   !
 !   and stress dissipation"                                                    !
 !   DOI: 10.1017/S0022112002007905                                             !
+!                                                                              !
+!   Dissipation equation's source term follows paper "Near-wall,               !
+!   Reynolds-stress model calculations of transonic flow configurations        !
+!   relevant to aircraft aerodynamics"                                         !
+!   DOI: doi:10.1016/j.ijheatfluidflow.2007.04.001                             !
 !------------------------------------------------------------------------------!
 !----------------------------------[Modules]-----------------------------------!
   use Const_Mod
