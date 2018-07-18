@@ -164,13 +164,6 @@
     call Var_Mod_Allocate_Solution('UW', uw, grid)
     call Var_Mod_Allocate_Solution('VW', vw, grid)
 
-    call Var_Mod_Allocate_Gradients(uu)
-    call Var_Mod_Allocate_Gradients(vv)
-    call Var_Mod_Allocate_Gradients(ww)
-    call Var_Mod_Allocate_Gradients(uv)
-    call Var_Mod_Allocate_Gradients(uw)
-    call Var_Mod_Allocate_Gradients(vw)
-
     call Var_Mod_Allocate_New_Only('KIN', kin, grid)
     call Var_Mod_Allocate_Solution('EPS', eps, grid)
 

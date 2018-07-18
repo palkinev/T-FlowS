@@ -92,15 +92,15 @@
   call Grad_Mod_For_Phi(grid, kin_z,   3, kin_zz, .true.)  ! d^2 K / dz^2
 
   do c = 1, grid % n_cells
+    eps_lim(c) = max(eps % n(c), TINY)
 
     ! Page 141, formula (1.1)
     eps_tot(c) = eps % n(c) + &
       0.5 * viscosity * ( kin_xx(c) + kin_yy(c) + kin_zz(c) )
+    eps_tot(c) = max(eps_tot(c), TINY) ! limit
 
     ! Page 142 Re_t
-    !re_t(c)  = kin % n(c)**2/max(viscosity*eps_tot(c), TINY) ! ???
     re_t(c)  = kin % n(c)**2/viscosity*eps_tot(c)
-
   end do
 
   if(name_phi .eq. 'UU' .or. name_phi .eq. 'VV' .or. name_phi .eq. 'WW' .or. &
@@ -162,12 +162,11 @@
           uw % n(c)*( u_xz(c)*u_xx(c) + u_yz(c)*u_xy(c) + u_zz(c)*u_xz(c) ) +  &
           vw % n(c)*( u_xz(c)*u_xy(c) + u_yz(c)*u_yy(c) + u_zz(c)*u_yz(c) ) +  &
           ww % n(c)*( u_xz(c)*u_xz(c) + u_yz(c)*u_yz(c) + u_zz(c)*u_zz(c) )
-      end do ! c
-    end do ! i
+      end do ! c = 1, grid % n_cells
+    end do ! iterator = 1, 3
 
     eps_second_term(:) = eps_second_term(:) * &
-      c_3e * viscosity * kin % n(c) / eps_tot(c) ! ???
-      ! 2.0 * 0.25  * viscosity * kin % n(c) / eps_tot(c)
+      c_3e * viscosity * kin % n(c) / eps_tot(c)
 
   end if
 
@@ -189,13 +188,7 @@
                 + uw % n(c) * w % x(c)  &
                 + vw % n(c) * w % y(c)  &
                 + ww % n(c) * w % z(c)  )
-
-    !------------------!
-    !   Apply limits   !
-    !------------------!
-    !p_kin(c)   = max(p_kin(c),   TINY) ! ???
-    !eps_tot(c) = max(eps_tot(c), TINY) ! ???
-    eps_lim(c) = max(eps % n(c), TINY)
+    !p_kin(c) = max(p_kin(c), TINY) ! ???
 
     if(name_phi .eq. 'UU' .or. name_phi .eq. 'VV' .or. name_phi .eq. 'WW' .or. &
        name_phi .eq. 'UV' .or. name_phi .eq. 'UW' .or. name_phi .eq. 'VW' ) then
@@ -291,8 +284,7 @@
       ! Page 165 C_2^w
       c_2_w  = min(a_,0.3)
       ! Page 165 f_w
-      f_w  = min(kin % n(c)**1.5/(2.5*eps % n(c)*grid % wall_dist(c)), 1.4) !???
-      !f_w  = min(kin % n(c)**1.5/(2.5*eps_tot(c)*grid % wall_dist(c)), 1.4)
+      f_w  = min(kin % n(c)**1.5/(2.5*eps % n(c)*grid % wall_dist(c)), 1.4)
 
       ! P_ij + G_ij [ copied from Sources_Ebm ]
       p11 = -2*(uu % n(c)*u % x(c) + uv % n(c)*u % y(c) + uw % n(c)*u % z(c))  &
@@ -349,7 +341,7 @@
       !---------------!
       if(name_phi .eq. 'UU') then
 
-        stress = uu % n(c)
+        stress = max(uu % n(c), 0.) ! >= 0
 
         ! P_ij + G_ij
         prod_and_coriolis = p11
@@ -376,7 +368,7 @@
       !---------------!
       if(name_phi .eq. 'VV') then
 
-        stress = vv % n(c)
+        stress = max(vv % n(c), 0.) ! >= 0
 
         ! P_ij + G_ij
         prod_and_coriolis = p22
@@ -403,7 +395,7 @@
       !---------------!
       if(name_phi .eq. 'WW') then
 
-        stress = ww % n(c)
+        stress = max(ww % n(c), 0.) ! >= 0
 
         ! P_ij + G_ij
         prod_and_coriolis = p33
@@ -555,8 +547,6 @@
   !----------------------!
 
     elseif (name_phi .eq. 'EPS') then
-      re_t(c)  = kin % n(c) * t_scale(c)/ viscosity ! ???
-
       ! Page 165 f_eps
       f_eps = 1. - (1. - 1.4/c_2e)*exp(-(re_t(c)/6.)**2)
 
@@ -574,7 +564,6 @@
           max(eps_first_term,     0.)  &
         + max(eps_second_term(c), 0.)  &
         + max(eps_third_term,     0. ) )
-   !max(eps_second_term(c)+c_1e * p_kin(c)*eps % n(c)/ kin % n(c), 0.) &
 
       a % val(a % dia(c)) = a % val(a % dia(c)) + grid % vol(c) * ( &
         c_2e * f_eps * eps_2_kin        & ! diss. eq., third term, other part
@@ -583,6 +572,7 @@
         - min(eps_second_term(c), 0.)   &
         - min(eps_third_term,     0.)   &
         ) / eps_lim(c)                  )
+
     end if
   end do
 
