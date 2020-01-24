@@ -119,7 +119,7 @@
   call Backup_Mod_Read_Cell_Bnd(comm, fh, d, vc, 'press',       &
                                 fld % p % n(-comm % nb_s:comm % nc_s))
   call Backup_Mod_Read_Cell_Bnd(comm, fh, d, vc, 'press_corr',  &
-                                fld %pp % n(-comm % nb_s:comm % nc_s))
+                                fld % pp % n(-comm % nb_s:comm % nc_s))
 
   !----------------------!
   !   Mass flow raters   !
