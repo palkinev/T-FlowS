@@ -204,7 +204,7 @@
                    + grid % sy(s)*grid % sy(s)  &
                    + grid % sz(s)*grid % sz(s) )
 
-    if(c2  < 0) then
+    if(c2 < 0) then
       t = (   grid % sx(s)*(grid % xf(s) - grid % xc(c1))        &
             + grid % sy(s)*(grid % yf(s) - grid % yc(c1))        &
             + grid % sz(s)*(grid % zf(s) - grid % zc(c1)) ) / sur_tot
@@ -714,7 +714,7 @@
 
     c1 = grid % faces_c(1,s)
     c2 = grid % faces_c(2,s)
-    if(c2   >  0) then
+    if(c2 > 0) then
 
       ! Scalar product of the face with line c1-c2 is good criteria
       if( (grid % sx(s) * (grid % xc(c2)-grid % xc(c1) )+                  &

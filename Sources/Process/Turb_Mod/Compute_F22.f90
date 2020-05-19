@@ -95,7 +95,7 @@
 
     ! Cross diffusion part
     phi % c(c1) = phi % c(c1) + f_ex - f_im
-    if(c2  > 0) then
+    if(c2 > 0) then
       phi % c(c2) = phi % c(c2) - f_ex + f_im
     end if
 
@@ -104,12 +104,12 @@
     a21 = a0
 
     ! Fill the system matrix
-    if(c2  > 0) then
+    if(c2 > 0) then
       a % val(a % pos(1,s)) = a % val(a % pos(1,s)) - a12
       a % val(a % dia(c1))  = a % val(a % dia(c1))  + a12
       a % val(a % pos(2,s)) = a % val(a % pos(2,s)) - a21
       a % val(a % dia(c2))  = a % val(a % dia(c2))  + a21
-    else if(c2  < 0) then
+    else if(c2 < 0) then
 
       ! Inflow
       if( (Grid_Mod_Bnd_Cond_Type(grid,c2) .eq. INFLOW)) then

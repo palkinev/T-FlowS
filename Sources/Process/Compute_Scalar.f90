@@ -160,12 +160,10 @@
 !   For species, we don't have some wall diffusivity
 !   if(turb % model .eq. K_EPS .or.  &
 !      turb % model .eq. K_EPS_ZETA_F) then
-!     if(c2 < 0) then
-!       if(Var_Mod_Bnd_Cond_Type(phi,c2) .eq. WALL .or.  &
-!          Var_Mod_Bnd_Cond_Type(phi,c2) .eq. WALLFL) then
-!         dif_eff1 = turb % con_w(c1)
-!         dif_eff2 = dif_eff1
-!       end if
+!     if(phi % bnd_cond_type(c2) .eq. WALL .or.  &
+!        phi % bnd_cond_type(c2) .eq. WALLFL) then
+!       dif_eff1 = turb % con_w(c1)
+!       dif_eff2 = dif_eff1
 !     end if
 !   end if
 
@@ -322,7 +320,7 @@
 
         b(c1) = b(c1) - dif_eff1 * (phi % n(c2) - phi % n(c1)) * a % fc(s)  &
               - f_ex1 + f_im1
-        if(c2  > 0) then
+        if(c2 > 0) then
           b(c2) = b(c2) + dif_eff1 * (phi % n(c2) - phi % n(c1)) * a % fc(s)  &
                 + f_ex2 - f_im2
         end if

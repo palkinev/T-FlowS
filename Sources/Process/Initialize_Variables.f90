@@ -484,7 +484,7 @@
   do s = 1, grid % n_faces
     c1 = grid % faces_c(1,s)
     c2 = grid % faces_c(2,s)
-    if(c2  < 0) then
+    if(c2 < 0) then
       m_flux % n(s) = flow % density_f(s) * ( u % n(c2) * grid % sx(s)  &
                                             + v % n(c2) * grid % sy(s)  &
                                             + w % n(c2) * grid % sz(s) )

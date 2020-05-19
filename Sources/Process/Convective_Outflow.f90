@@ -48,21 +48,19 @@
     c2 = grid % faces_c(2,s)
 
     ! On the boundary perform the extrapolation
-    if(c2 < 0) then
-      if( (Grid_Mod_Bnd_Cond_Type(grid,c2) .eq. CONVECT) ) then
-        u % n(c2) = u % n(c2)                      &
-                  - ( bulk % u * u % x(c1)         &
-                    + bulk % v * u % y(c1)         &
-                    + bulk % w * u % z(c1) ) * dt
-        v % n(c2) = v % n(c2)                      &
-                  - ( bulk % u * v % x(c1)         &
-                    + bulk % v * v % y(c1)         &
-                    + bulk % w * v % z(c1) ) * dt
-        w % n(c2) = w % n(c2)                      &
-                  - ( bulk % u * w % x(c1)         &
-                    + bulk % v * w % y(c1)         &
-                    + bulk % w * w % z(c1) ) * dt
-      end if
+    if( (u % bnd_cond_type(c2) .eq. CONVECT) ) then
+      u % n(c2) = u % n(c2)                      &
+                - ( bulk % u * u % x(c1)         &
+                  + bulk % v * u % y(c1)         &
+                  + bulk % w * u % z(c1) ) * dt
+      v % n(c2) = v % n(c2)                      &
+                - ( bulk % u * v % x(c1)         &
+                  + bulk % v * v % y(c1)         &
+                  + bulk % w * v % z(c1) ) * dt
+      w % n(c2) = w % n(c2)                      &
+                - ( bulk % u * w % x(c1)         &
+                  + bulk % v * w % y(c1)         &
+                  + bulk % w * w % z(c1) ) * dt
     end if
   end do
 
@@ -89,22 +87,20 @@
       c2 = grid % faces_c(2,s)
 
       ! On the boundary perform the extrapolation
-      if(c2 < 0) then
-        if( (Grid_Mod_Bnd_Cond_Type(grid,c2) .eq. CONVECT) ) then
-          kin % n(c2) = kin % n(c2)                       &
-                      - ( bulk % u * kin % x(c1)          &
-                        + bulk % v * kin % y(c1)          &
-                        + bulk % w * kin % z(c1) ) * dt
-          eps % n(c2) = eps % n(c2)                       &
-                      - ( bulk % u * eps % x(c1)          &
-                        + bulk % v * eps % y(c1)          &
-                        + bulk % w * eps % z(c1) ) * dt
-          if(heat_transfer) then
-            t2 % n(c2) = t2 % n(c2)                       &
-                        - ( bulk % u * t2 % x(c1)         &
-                          + bulk % v * t2 % y(c1)         &
-                          + bulk % w * t2 % z(c1) ) * dt
-          end if
+      if( (turb % bnd_cond_type(c2) .eq. CONVECT) ) then
+        kin % n(c2) = kin % n(c2)                       &
+                    - ( bulk % u * kin % x(c1)          &
+                      + bulk % v * kin % y(c1)          &
+                      + bulk % w * kin % z(c1) ) * dt
+        eps % n(c2) = eps % n(c2)                       &
+                    - ( bulk % u * eps % x(c1)          &
+                      + bulk % v * eps % y(c1)          &
+                      + bulk % w * eps % z(c1) ) * dt
+        if(heat_transfer) then
+          t2 % n(c2) = t2 % n(c2)                       &
+                      - ( bulk % u * t2 % x(c1)         &
+                        + bulk % v * t2 % y(c1)         &
+                        + bulk % w * t2 % z(c1) ) * dt
         end if
       end if
     end do
@@ -130,30 +126,28 @@
       c2 = grid % faces_c(2,s)
 
       ! On the boundary perform the extrapolation
-      if(c2 < 0) then
-        if( (Grid_Mod_Bnd_Cond_Type(grid,c2) .eq. CONVECT) ) then
-          kin % n(c2) = kin % n(c2)                       &
-                      - ( bulk % u * kin % x(c1)          &
-                        + bulk % v * kin % y(c1)          &
-                        + bulk % w * kin % z(c1) ) * dt
-          eps % n(c2) = eps % n(c2)                       &
-                      - ( bulk % u * eps % x(c1)          &
-                        + bulk % v * eps % y(c1)          &
-                        + bulk % w * eps % z(c1) ) * dt
-          f22 % n(c2) = f22 % n(c2)                       &
-                      - ( bulk % u * f22 % x(c1)          &
-                        + bulk % v * f22 % y(c1)          &
-                        + bulk % w * f22 % z(c1) ) * dt
-          zeta % n(c2) = zeta % n(c2)                     &
-                      - ( bulk % u * zeta % x(c1)         &
-                        + bulk % v * zeta % y(c1)         &
-                        + bulk % w * zeta % z(c1) ) * dt
-          if(heat_transfer) then
-            t2 % n(c2) = t2 % n(c2)                       &
-                        - ( bulk % u * t2 % x(c1)         &
-                          + bulk % v * t2 % y(c1)         &
-                          + bulk % w * t2 % z(c1) ) * dt
-          end if
+      if( (turb % bnd_cond_type(c2) .eq. CONVECT) ) then
+        kin % n(c2) = kin % n(c2)                       &
+                    - ( bulk % u * kin % x(c1)          &
+                      + bulk % v * kin % y(c1)          &
+                      + bulk % w * kin % z(c1) ) * dt
+        eps % n(c2) = eps % n(c2)                       &
+                    - ( bulk % u * eps % x(c1)          &
+                      + bulk % v * eps % y(c1)          &
+                      + bulk % w * eps % z(c1) ) * dt
+        f22 % n(c2) = f22 % n(c2)                       &
+                    - ( bulk % u * f22 % x(c1)          &
+                      + bulk % v * f22 % y(c1)          &
+                      + bulk % w * f22 % z(c1) ) * dt
+        zeta % n(c2) = zeta % n(c2)                     &
+                    - ( bulk % u * zeta % x(c1)         &
+                      + bulk % v * zeta % y(c1)         &
+                      + bulk % w * zeta % z(c1) ) * dt
+        if(heat_transfer) then
+          t2 % n(c2) = t2 % n(c2)                       &
+                      - ( bulk % u * t2 % x(c1)         &
+                        + bulk % v * t2 % y(c1)         &
+                        + bulk % w * t2 % z(c1) ) * dt
         end if
       end if
     end do
@@ -183,42 +177,40 @@
       c2 = grid % faces_c(2,s)
 
       ! On the boundary perform the extrapolation
-      if(c2 < 0) then
-        if( (Grid_Mod_Bnd_Cond_Type(grid,c2) .eq. CONVECT) ) then
-          uu % n(c2) = uu % n(c2)                          &
-                      - ( bulk % u * uu % x(c1)            &
-                        + bulk % v * uu % y(c1)            &
-                        + bulk % w * uu % z(c1) ) * dt
-          vv % n(c2) = vv % n(c2)                          &
-                      - ( bulk % u * vv % x(c1)            &
-                        + bulk % v * vv % y(c1)            &
-                        + bulk % w * vv % z(c1) ) * dt
-          ww % n(c2) = ww % n(c2)                          &
-                      - ( bulk % u * ww % x(c1)            &
-                        + bulk % v * ww % y(c1)            &
-                        + bulk % w * ww % z(c1) ) * dt
-          uv % n(c2) = uv % n(c2)                          &
-                      - ( bulk % u * uv % x(c1)            &
-                        + bulk % v * uv % y(c1)            &
-                        + bulk % w * uv % z(c1) ) * dt
-          uw % n(c2) = uw % n(c2)                          &
-                      - ( bulk % u * uw % x(c1)            &
-                        + bulk % v * uw % y(c1)            &
-                        + bulk % w * uw % z(c1) ) * dt
-          vw % n(c2) = vw % n(c2)                          &
-                      - ( bulk % u * vw % x(c1)            &
-                        + bulk % v * vw % y(c1)            &
-                        + bulk % w * vw % z(c1) ) * dt
-          eps % n(c2) = eps % n(c2)                        &
-                      - ( bulk % u * eps % x(c1)           &
-                        + bulk % v * eps % y(c1)           &
-                        + bulk % w * eps % z(c1) ) * dt
-          if(turb % model .eq. RSM_MANCEAU_HANJALIC) then
-            f22 % n(c2) = f22 % n(c2)                      &
-                        - ( bulk % u * f22 % x(c1)         &
-                          + bulk % v * f22 % y(c1)         &
-                          + bulk % w * f22 % z(c1) ) * dt
-          end if
+      if( (turb % bnd_cond_type(c2) .eq. CONVECT) ) then
+        uu % n(c2) = uu % n(c2)                          &
+                    - ( bulk % u * uu % x(c1)            &
+                      + bulk % v * uu % y(c1)            &
+                      + bulk % w * uu % z(c1) ) * dt
+        vv % n(c2) = vv % n(c2)                          &
+                    - ( bulk % u * vv % x(c1)            &
+                      + bulk % v * vv % y(c1)            &
+                      + bulk % w * vv % z(c1) ) * dt
+        ww % n(c2) = ww % n(c2)                          &
+                    - ( bulk % u * ww % x(c1)            &
+                      + bulk % v * ww % y(c1)            &
+                      + bulk % w * ww % z(c1) ) * dt
+        uv % n(c2) = uv % n(c2)                          &
+                    - ( bulk % u * uv % x(c1)            &
+                      + bulk % v * uv % y(c1)            &
+                      + bulk % w * uv % z(c1) ) * dt
+        uw % n(c2) = uw % n(c2)                          &
+                    - ( bulk % u * uw % x(c1)            &
+                      + bulk % v * uw % y(c1)            &
+                      + bulk % w * uw % z(c1) ) * dt
+        vw % n(c2) = vw % n(c2)                          &
+                    - ( bulk % u * vw % x(c1)            &
+                      + bulk % v * vw % y(c1)            &
+                      + bulk % w * vw % z(c1) ) * dt
+        eps % n(c2) = eps % n(c2)                        &
+                    - ( bulk % u * eps % x(c1)           &
+                      + bulk % v * eps % y(c1)           &
+                      + bulk % w * eps % z(c1) ) * dt
+        if(turb % model .eq. RSM_MANCEAU_HANJALIC) then
+          f22 % n(c2) = f22 % n(c2)                      &
+                      - ( bulk % u * f22 % x(c1)         &
+                        + bulk % v * f22 % y(c1)         &
+                        + bulk % w * f22 % z(c1) ) * dt
         end if
       end if
     end do
@@ -238,13 +230,11 @@
       c2 = grid % faces_c(2,s)
 
       ! On the boundary perform the extrapolation
-      if(c2 < 0) then
-        if( (Grid_Mod_Bnd_Cond_Type(grid,c2) .eq. CONVECT) ) then
-          phi % n(c2) = phi % n(c2)                      &
-                      - ( bulk % u * phi % x(c1)         &
-                        + bulk % v * phi % y(c1)         &
-                        + bulk % w * phi % z(c1) ) * dt
-        end if
+      if( (phi % bnd_cond_type(c2) .eq. CONVECT) ) then
+        phi % n(c2) = phi % n(c2)                      &
+                    - ( bulk % u * phi % x(c1)         &
+                      + bulk % v * phi % y(c1)         &
+                      + bulk % w * phi % z(c1) ) * dt
       end if
     end do
   end do
@@ -260,13 +250,11 @@
       c2 = grid % faces_c(2,s)
 
       ! On the boundary perform the extrapolation
-      if(c2 < 0) then
-        if( (Grid_Mod_Bnd_Cond_Type(grid,c2) .eq. CONVECT) ) then
-          t % n(c2) = t % n(c2)                      &
-                    - ( bulk % u * t % x(c1)         &
-                      + bulk % v * t % y(c1)         &
-                      + bulk % w * t % z(c1) ) * dt
-        end if
+      if( (t % bnd_cond_type(c2) .eq. CONVECT) ) then
+        t % n(c2) = t % n(c2)                      &
+                  - ( bulk % u * t % x(c1)         &
+                    + bulk % v * t % y(c1)         &
+                    + bulk % w * t % z(c1) ) * dt
       end if
     end do
   end if

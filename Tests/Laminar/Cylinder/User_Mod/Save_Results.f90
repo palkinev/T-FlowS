@@ -62,20 +62,19 @@
   nuss_mean  = 0.0
   n_points = 0
 
-  if(heat_transfer) then 
+  if(heat_transfer) then
     do s = 1, grid % n_faces
       c1 = grid % faces_c(1,s)
       c2 = grid % faces_c(2,s)
-      if(c2  < 0) then
-        if( Grid_Mod_Bnd_Cond_Type(grid, c2) .eq. WALL .or.  &
-            Grid_Mod_Bnd_Cond_Type(grid, c2) .eq. WALLFL) then
 
-          nuss_mean = nuss_mean + t % q(c2)  &
-                  / (k_const * (t % n(c2) - t_ref + TINY))
-          n_points = n_points + 1
-        end if
+      if( t % bnd_cond_type(c2) .eq. WALL .or.  &
+          t % bnd_cond_type(c2) .eq. WALLFL) then
+
+        nuss_mean = nuss_mean + t % q(c2)  &
+                / (k_const * (t % n(c2) - t_ref + TINY))
+        n_points = n_points + 1
       end if
-    end do
+    end do  ! 1, grid % n_faces
 
     call Comm_Mod_Global_Sum_Real(nuss_mean)
     call Comm_Mod_Global_Sum_Int(n_points)

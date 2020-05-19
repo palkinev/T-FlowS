@@ -24,12 +24,16 @@
   do s = 1, grid % n_faces
     c1 = grid % faces_c(1,s)
     c2 = grid % faces_c(2,s)
-    if(c2 < 0) then
-      if(Grid_Mod_Bnd_Cond_Type(grid,c2) .ne. PRESSURE) then
-        pp % n(c2) = 0.0
-      end if
-    end if
-  end do
+
+    if((p % bnd_cond_type(c2) .eq. INFLOW)  .or.  &
+       (p % bnd_cond_type(c2) .eq. WALL)    .or.  &
+       (p % bnd_cond_type(c2) .eq. WALLFL)  .or.  &
+       (p % bnd_cond_type(c2) .eq. OUTFLOW) .or.  &
+       (p % bnd_cond_type(c2) .eq. CONVECT) .or.  &
+       (p % bnd_cond_type(c2) .eq. SYMMETRY) ) then
+      pp % n(c2) = 0.0
+    end if  ! .not. PRESSURE
+  end do  ! 1, grid % n_faces
 
   call Field_Mod_Grad_Component(flow, pp % n, 1, pp % x)  ! dp/dx
   call Field_Mod_Grad_Component(flow, pp % n, 2, pp % y)  ! dp/dy

@@ -135,7 +135,7 @@
   !   Average the results   !
   !-------------------------!
   do i = 1, n_prob-1
-    do c = 1, grid % n_cells - grid % comm % n_buff_cells 
+    do c = 1, grid % n_cells - grid % comm % n_buff_cells
       rad = 1.0 - grid % wall_dist(c)
       if( rad < (z_p(i)) .and.  &
           rad > (z_p(i+1))) then
@@ -168,7 +168,7 @@
           wt_p(i)   = wt_p(i) + wt % n(c)
         end if
         n_count(i) = n_count(i) + 1
-      end if 
+      end if
     end do
   end do
 
@@ -235,7 +235,7 @@
     u_tau_p = sqrt(max(abs(bulk % p_drop_x),  &
                        abs(bulk % p_drop_y),  &
                        abs(bulk % p_drop_z))/dens_const)
-  else  
+  else
     u_tau_p =  sqrt( (visc_const*sqrt(u_p(1)**2 +   &
                                         v_p(1)**2 +   &
                                         w_p(1)**2)    &
@@ -271,16 +271,14 @@
     do s = 1, grid % n_faces
       c1 = grid % faces_c(1,s)
       c2 = grid % faces_c(2,s)
-      if(c2  < 0) then
-        if( Grid_Mod_Bnd_Cond_Type(grid, c2) .eq. WALL .or.  &
-            Grid_Mod_Bnd_Cond_Type(grid, c2) .eq. WALLFL) then
+      if( t % bnd_cond_type(c2) .eq. WALL .or.  &
+          t % bnd_cond_type(c2) .eq. WALLFL) then
 
-          t_wall   = t_wall + t % n(c2)
-          nu_mean  = nu_mean + t % q(c2) / (cond_const*(t % n(c2) - t_inf))
-          n_points = n_points + 1
-        end if
+        t_wall   = t_wall + t % n(c2)
+        nu_mean  = nu_mean + t % q(c2) / (cond_const*(t % n(c2) - t_inf))
+        n_points = n_points + 1
       end if
-    end do
+    end do  ! 1, grid % n_faces
 
     call Comm_Mod_Global_Sum_Real(t_wall)
     call Comm_Mod_Global_Sum_Real(nu_mean)
@@ -303,7 +301,7 @@
     cf      = u_tau_p**2/(0.5*ubulk**2)
     error   = abs(cf_dean - cf)/cf_dean * 100.0
     write(i,'(a1,(a12,E12.6))')  &
-    '#', 'ubulk    = ', ubulk 
+    '#', 'ubulk    = ', ubulk
     write(i,'(a1,(a12,E12.6))')  &
     '#', 'Re       = ', dens_const * ubulk * 2.0/visc_const
     write(i,'(a1,(a12,E12.6))')  &
@@ -311,15 +309,15 @@
     write(i,'(a1,(a12,E12.6))')  &
     '#', 'Cf       = ', 2.0*(u_tau_p/ubulk)**2
     write(i,'(a1,(a12,F12.6))')  &
-    '#', 'Utau     = ', u_tau_p 
-    write(i,'(a1,(a12,F12.6,a2,a22))') & 
+    '#', 'Utau     = ', u_tau_p
+    write(i,'(a1,(a12,F12.6,a2,a22))') &
     '#', 'Cf_error = ', error, ' %', 'Dean formula is used.'
     if(heat_transfer) then
-      write(i,'(a1,(a12, F12.6))')'#', 'Nu number =', nu_mean 
+      write(i,'(a1,(a12, F12.6))')'#', 'Nu number =', nu_mean
       write(i,'(a1,(a12, F12.6,a2,A39))')'#', 'Nu_error  =',  &
-            abs(0.023*0.5*re**0.8*pr**0.4 - nu_mean)          & 
+            abs(0.023*0.5*re**0.8*pr**0.4 - nu_mean)          &
             / (0.023*0.5*re**0.8*pr**0.4) * 100.0, ' %',      &
-      'correlation of Dittus-Boelter is used.' 
+      'correlation of Dittus-Boelter is used.'
     end if
 
     if(turbulence_model .eq. K_EPS) then
@@ -398,7 +396,7 @@
     if(turbulence_model .eq. K_EPS_ZETA_F) then
       f22_p(i) = f22_p(i) * visc_const / u_tau_p**2  ! f22%n(c)
     end if
- 
+
     if(heat_transfer) then
       t_p (i) = (t_wall - t_p(i)) / t_tau   ! t % n(c)
       ut_p(i) = ut_p(i) / (u_tau_p*t_tau)   ! ut % n(c)

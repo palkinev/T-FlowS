@@ -234,7 +234,7 @@
                       grid % sy(s)*grid % sy(s) +  &
                       grid % sz(s)*grid % sz(s))
 
-      if(c2  < 0) then
+      if(c2 < 0) then
         t = (   grid % sx(s) * (grid % xf(s)-grid % xc(c1))           &
               + grid % sy(s) * (grid % yf(s)-grid % yc(c1))           &
               + grid % sz(s) * (grid % zf(s)-grid % zc(c1)) ) / tot_surf
@@ -391,7 +391,7 @@
       end if
 
       ! Second cell
-      if(c2  > 0) then
+      if(c2 > 0) then
         x_cell_tmp = grid % xc(c2) + grid % dx(s)
         y_cell_tmp = grid % yc(c2) + grid % dy(s)
         z_cell_tmp = grid % zc(c2) + grid % dz(s)

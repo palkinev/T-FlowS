@@ -40,7 +40,6 @@
                                              grid % dy(s),     &
                                              grid % dz(s)/) )
     end if  ! .not. PRESSURE
-
   end do  ! 1, grid % n_faces
 
   call Field_Mod_Grad_Component(flow, p % n, 1, p % x)  ! dp/dx

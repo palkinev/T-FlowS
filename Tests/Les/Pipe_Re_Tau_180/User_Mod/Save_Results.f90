@@ -252,17 +252,16 @@
     do s = 1, grid % n_faces
       c1 = grid % faces_c(1,s)
       c2 = grid % faces_c(2,s)
-      if(c2  < 0) then
-        if( Grid_Mod_Bnd_Cond_Type(grid, c2) .eq. WALL .or.  &
-            Grid_Mod_Bnd_Cond_Type(grid, c2) .eq. WALLFL) then
 
-          t_wall   = t_wall + turb % t_mean(c2)
-          nu_mean  = nu_mean + t % q(c2)  &
-                             / (cond_const*(turb % t_mean(c2) - t_inf))
-          n_points = n_points + 1
-        end if
+      if( t % bnd_cond_type(c2) .eq. WALL .or.  &
+          t % bnd_cond_type(c2) .eq. WALLFL) then
+
+        t_wall   = t_wall + turb % t_mean(c2)
+        nu_mean  = nu_mean + t % q(c2)  &
+                           / (cond_const*(turb % t_mean(c2) - t_inf))
+        n_points = n_points + 1
       end if
-    end do
+    end do  ! 1, grid % n_faces
 
     call Comm_Mod_Global_Sum_Real(t_wall)
     call Comm_Mod_Global_Sum_Real(nu_mean)
@@ -285,7 +284,7 @@
     cf      = u_tau_p**2/(0.5*ubulk**2)
     error   = abs(cf_dean - cf)/cf_dean * 100.0
     write(i,'(a1,(a12,e12.6))')  &
-    '#', 'ubulk    = ', ubulk 
+    '#', 'ubulk    = ', ubulk
     write(i,'(a1,(a12,e12.6))')  &
     '#', 're       = ', dens_const * ubulk * 2.0 / visc_const
     write(i,'(a1,(a12,e12.6))')  &
@@ -293,15 +292,15 @@
     write(i,'(a1,(a12,e12.6))')  &
     '#', 'cf       = ', 2.0*(u_tau_p/ubulk)**2
     write(i,'(a1,(a12,f12.6))')  &
-    '#', 'Utau     = ', u_tau_p 
-    write(i,'(a1,(a12,f12.6,a2,a22))') & 
+    '#', 'Utau     = ', u_tau_p
+    write(i,'(a1,(a12,f12.6,a2,a22))') &
     '#', 'Cf_error = ', error, ' %', 'Dean formula is used.'
     if(heat_transfer) then
-      write(i,'(a1,(a12, f12.6))')'#', 'Nu number =', nu_mean 
+      write(i,'(a1,(a12, f12.6))')'#', 'Nu number =', nu_mean
       write(i,'(a1,(a12, f12.6,a2,a39))')'#', 'Nu error  =',  &
             abs(0.023*0.5*re**0.8*pr**0.4 - nu_mean)          &
             / (0.023*0.5*re**0.8*pr**0.4) * 100.0, ' %',      &
-            'correlation of Dittus-Boelter is used.' 
+            'correlation of Dittus-Boelter is used.'
     end if
 
 

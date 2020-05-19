@@ -50,7 +50,7 @@
 
   ! Set file names for results
   call File_Mod_Set_Name(res_name,         &
-                         time_step=ts,     &   
+                         time_step=ts,     &
                          appendix='-res',  &
                          extension='.dat')
   call File_Mod_Set_Name(res_name_plus,         &
@@ -127,7 +127,7 @@
   !   Average the results   !
   !-------------------------!
   do i = 1, n_prob-1
-    do c = 1, grid % n_cells - grid % comm % n_buff_cells 
+    do c = 1, grid % n_cells - grid % comm % n_buff_cells
       if(grid % zc(c) > (z_p(i)) .and.  &
          grid % zc(c) < (z_p(i+1))) then
 
@@ -247,7 +247,7 @@
   end if
 
   if(heat_transfer) then
-    d_wall = 0.0 
+    d_wall = 0.0
     do c = 1, grid % n_cells
       if(grid % wall_dist(c) > d_wall) then
         d_wall = grid % wall_dist(c)
@@ -266,15 +266,14 @@
     do s = 1, grid % n_faces
       c1 = grid % faces_c(1,s)
       c2 = grid % faces_c(2,s)
-      if(c2  < 0) then
-        if( Grid_Mod_Bnd_Cond_Type(grid, c2) .eq. WALL .or.  &
-            Grid_Mod_Bnd_Cond_Type(grid, c2) .eq. WALLFL) then
 
-          t_wall   = t_wall + turb % t_mean(c2)
-          nu_mean  = nu_mean + t % q(c2)  &
-                   / (cond_const*(turb % t_mean(c2) - t_inf))
-          n_points = n_points + 1
-        end if
+      if( t % bnd_cond_type(c2) .eq. WALL .or.  &
+          t % bnd_cond_type(c2) .eq. WALLFL) then
+
+        t_wall   = t_wall + turb % t_mean(c2)
+        nu_mean  = nu_mean + t % q(c2)  &
+                 / (cond_const*(turb % t_mean(c2) - t_inf))
+        n_points = n_points + 1
       end if
     end do
 
@@ -299,7 +298,7 @@
     cf      = u_tau_p**2/(0.5*ubulk**2)
     error   = abs(cf_dean - cf)/cf_dean * 100.0
     write(i,'(a1,(a12,e12.6))')  &
-    '#', 'ubulk    = ', ubulk 
+    '#', 'ubulk    = ', ubulk
     write(i,'(a1,(a12,e12.6))')  &
     '#', 're       = ', dens_const * ubulk * 2.0 / visc_const
     write(i,'(a1,(a12,e12.6))')  &
@@ -307,8 +306,8 @@
     write(i,'(a1,(a12,e12.6))')  &
     '#', 'Cf       = ', 2.0*(u_tau_p/ubulk)**2
     write(i,'(a1,(a12,f12.6))')  &
-    '#', 'Utau     = ', u_tau_p 
-    write(i,'(a1,(a12,f12.6,a2,a22))') & 
+    '#', 'Utau     = ', u_tau_p
+    write(i,'(a1,(a12,f12.6,a2,a22))') &
     '#', 'Cf_error = ', error, ' %', 'Dean formula is used.'
     if(heat_transfer) then
       write(i,'(a1,(a12, f12.6))')'#', 'Nu number =', nu_mean
@@ -396,7 +395,7 @@
     do i = 1, n_prob
       if(n_count(i) .ne. 0) then
         write(4,'(14es15.5e3)')                                & ! write
-              wall_p(i),                                       & ! 1    
+              wall_p(i),                                       & ! 1
               u_p(i),                                          & ! 2
               0.5*(uu_p(i)+vv_p(i)+ww_p(i)),                   & ! 3
               kin_p(i),                                        & ! 4
@@ -406,7 +405,7 @@
               abs(uw_p(i)) + abs(uw_mod_p(i)),                 & ! 8
               vis_t_p(i),                                      & ! 9
               t_p(i),                                          & ! 10
-              t2_p(i),                                         & ! 11 
+              t2_p(i),                                         & ! 11
               ut_p(i),                                         & ! 12
               vt_p(i),                                         & ! 13
               wt_p(i)                                            ! 14
