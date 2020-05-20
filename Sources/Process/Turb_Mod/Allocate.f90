@@ -10,7 +10,7 @@
   type(Field_Type), target :: flow
 !-----------------------------------[Locals]-----------------------------------!
   type(Grid_Type), pointer :: grid
-  integer                  :: nb, nc
+  integer                  :: nb, nc, nf
 !==============================================================================!
 
   ! Store pointers
@@ -21,6 +21,7 @@
   grid => flow % pnt_grid
   nb = grid % n_bnd_cells
   nc = grid % n_cells
+  nf = grid % n_faces
 
   ! Allocate deltas
   allocate(turb % h_max(-nb:nc));  turb % h_max = 0.
@@ -30,7 +31,7 @@
   allocate(turb % tau_wall(-nb:nc));  turb % tau_wall = 0.
 
   ! Allocate b.c. type for turb. asspciated models
-  allocate(turb % bnd_cond_type(-nb:nc));  turb % bnd_cond_type = 0
+  allocate(turb % bnd_cond_type(-nb:nf));  turb % bnd_cond_type = 0
 
   !-----------------!
   !   K-eps model   !
